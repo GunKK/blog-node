@@ -1,0 +1,31 @@
+<% block('title').append('Login page') %> <% layout('layouts/main') -%>
+
+<div class="container mt-5 mb-5">
+    <div class="row mb-3">
+        <h1 class="text-center">Đăng nhập thành viên</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4">
+            <form action="#" method="post">
+                <p class="mb-3">
+                    <label for="email" class="form-label">Địa chỉ email</label><br />
+                    <input
+                        type="email"
+                        id="email"
+                        class="form-control"
+                        name="email"
+                        placeholder="Enter your email address"
+                    />
+                </p>
+                <p class="mb-3">
+                    <label for="password" class="form-label">Mật khẩu</label><br />
+                    <input type="password" id="password" class="form-control" name="password" />
+                </p>
+                <p class="mb-3 text-center"><button type="submit" class="btn btn-success">Đăng nhập</button></p>
+            </form>
+        </div>
+        <div class="col-4"></div>
+    </div>
+</div>

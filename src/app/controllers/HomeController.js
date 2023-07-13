@@ -1,10 +1,10 @@
 class HomeController {
     index(req,res) {
-        res.json({msg: 'say hi'})
+        res.render("home");
     }
 
-    test(req, res) {
-        res.render("home");
+    contact(req, res) {
+        res.render("contact");
     }
 }
 module.exports = new HomeController();

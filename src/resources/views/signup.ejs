@@ -1,0 +1,39 @@
+<% block('title').append('Signup page') %> <% layout('layouts/main') -%>
+
+<div class="container mt-5 mb-5">
+    <div class="row mb-3">
+        <h1 class="text-center">Đăng kí thành viên</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4">
+            <form action="#" method="post">
+                <p class="mb-3">
+                    <label for="name" class="form-label">Tên người dùng</label><br />
+                    <input type="text" class="form-control" name="name" placeholder="Enter your name" />
+                </p>
+                <p class="mb-3">
+                    <label for="email" class="form-label">Địa chỉ email</label><br />
+                    <input
+                        type="email"
+                        id="email"
+                        class="form-control"
+                        name="email"
+                        placeholder="Enter your email address"
+                    />
+                </p>
+                <p class="mb-3">
+                    <label for="password" class="form-label">Mật khẩu</label><br />
+                    <input type="password" id="password" class="form-control" name="password" />
+                </p>
+                <p class="mb-3">
+                    <label for="re-password" class="form-label">Xác nhận mật khẩu</label><br />
+                    <input type="password" id="re-password" class="form-control" name="re_password" />
+                </p>
+                <p class="mb-3 text-center"><button type="submit" class="btn btn-primary">Đăng kí</button></p>
+            </form>
+        </div>
+        <div class="col-4"></div>
+    </div>
+</div>
