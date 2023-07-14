@@ -21,6 +21,14 @@ module.exports = class User {
         );
     }
 
+    static findByEmail(email) {
+        return db.execute('select * from users where email = ?', [email]);
+    }
+
+    static async emailExist(email) {
+        return await db.execute('select count(*) from users where email = ?', [email]);
+    }
+
     static fetchAll() {
         return db.execute('select * from users');
     }
