@@ -1,36 +1,41 @@
 const helper = require('../../util/helper');
-const User = require('../models/User')
+const User = require('../models/User');
 class RegisterController {
     create(req, res) {
-        res.render("signup");
+        res.render('signup');
     }
 
-    store(req, res) {
-        let params = req.body 
-            // validate 
-            if (params.email.trim().length === 0) {
-                res.render("signup",{data: {"error": "Email is required"}});
-            }
-        
+    async store(req, res) {
+        try {
+            const params = req.body;
+            // console.log(params);
+            // validate
             if (params.name.trim().length === 0) {
-                res.render("signup",{data: {"error": "name is required"}});
+                res.render('signup', { data: { error: 'name is required' } });
             }
-        
             if (params.password.trim().length === 0) {
-                res.render("signup",{data: {"error": "password is required"}});
+                res.render('signup', { data: { error: 'password is required' } });
             }
-        
+
             if (params.password != params.re_password) {
-                res.render("signup",{data: {"error": "password is not match"}});
+                res.render('signup', { data: { error: 'password is not match' } });
             }
-        // insert user into db
-        const hash = helper.hashPassword(params.password);
-        const user = new User(params.name, params.email, hash, 2);
-        user
-            .save()
-            .then(() => {})
-            .catch((err) => console.log(err));
-        res.redirect('/login');
+
+            const [user] = await User.emailExist(params.email);
+            const check = parseInt(user[0].count);
+            if (check != 0) {
+                res.render('signup', { data: { error: 'email already exists' } });
+            } else {
+                const hash = helper.hashPassword(params.password);
+                const newUser = await User.create(params.name, params.email, hash, 2);
+                res.render('login', { data: { success: 'signup successful', user: newUser } });
+            }
+        } catch (error) {
+            res.json({
+                status: 'error',
+                error: error.message,
+            });
+        }
     }
 }
 module.exports = new RegisterController();

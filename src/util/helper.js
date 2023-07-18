@@ -2,11 +2,14 @@ const bcrypt = require('bcrypt');
 require('dotenv').config();
 
 function hashPassword(password) {
-    let saltRounds = process.env.SALT;
-    let salt = bcrypt.genSaltSync(saltRounds);
-    const hash = bcrypt.hashSync(password, salt);
-
-    return hash;
+    try {
+        const saltRounds = parseInt(process.env.SALT || 10);
+        const salt = bcrypt.genSaltSync(saltRounds);
+        const hash = bcrypt.hashSync(password, salt);
+        return hash;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 function comparePassword(password, hashPassword) {

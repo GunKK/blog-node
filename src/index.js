@@ -3,9 +3,10 @@ const engine = require('ejs-mate');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 const path = require('path');
-const sessions = require('express-session');
+const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
+const flash = require('connect-flash');
 
 const app = express();
 
@@ -21,15 +22,15 @@ app.engine('ejs', engine);
 app.set('views', path.join(__dirname, 'resources', 'views'));
 app.set('view engine', 'ejs');
 
-// const oneDay = 1000 * 60 * 60 * 24;
-// app.use(sessions({
-//     secret: process.env.SECRET_KEY,
-//     saveUninitialized:true,
-//     cookie: { maxAge: oneDay },
-//     resave: false 
+// app.use(session({
+//     secret:process.env.SECRET_KEY,
+//     saveUninitialized: true,
+//     resave: false
 // }));
 
-app.use(cookieParser());
+// app.use(flash());
+
+// app.use(cookieParser());
 
 // middleware
 // if (process.env.NODE_ENV === 'development') {

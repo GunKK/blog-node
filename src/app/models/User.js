@@ -7,10 +7,16 @@ module.exports = class User {
         this.role = role;
     }
 
-    save() {
-        return db.execute(
+    // async save() {
+    //     return await db.execute(
+    //         'insert into users (name, email, password, role) values (?,?,?,?)',
+    //         [this.name, this.email, this.password, this.role]  
+    //     );
+    // }
+    static async create(name, email, password, role) {
+        return await db.execute(
             'insert into users (name, email, password, role) values (?,?,?,?)',
-            [this.name, this.email, this.password, this.role]  
+            [name, email, password, role]
         );
     }
 
@@ -21,12 +27,12 @@ module.exports = class User {
         );
     }
 
-    static findByEmail(email) {
-        return db.execute('select * from users where email = ?', [email]);
+    static async findByEmail(email) {
+        return await db.execute('select * from users where email = ?', [email]);
     }
 
     static async emailExist(email) {
-        return await db.execute('select count(*) from users where email = ?', [email]);
+        return await db.execute('select count(*) as count from users where email = ?', [email]);
     }
 
     static fetchAll() {

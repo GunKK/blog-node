@@ -4,19 +4,23 @@ class SessionController {
         res.render("login");
     }
 
-    store(req, res) {
+    async store(req, res) {
         // validate 
         let params = req.body
-        if (params.email.trim().length === 0) {
-            res.render("login",{data: {"error": "Email is required"}});
-        }
+        // if (params.email.trim().length === 0) {
+        //     res.render("login",{data: {"error": "Email is required"}});
+        // }
     
-        if (params.password.trim().length === 0) {
-            res.render("login",{data: {"error": "password is required"}});
-        }
+        // if (params.password.trim().length === 0) {
+        //     res.render("login",{data: {"error": "password is required"}});
+        // }
 
-        let checkEmail = User.findByEmail(params.email)
-        
+        try {
+            const checkEmail = await User.findByEmail(params.email)
+            console.log(checkEmail[0])
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
 module.exports = new SessionController();
