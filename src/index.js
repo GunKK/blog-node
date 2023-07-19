@@ -22,11 +22,13 @@ app.engine('ejs', engine);
 app.set('views', path.join(__dirname, 'resources', 'views'));
 app.set('view engine', 'ejs');
 
-// app.use(session({
-//     secret:process.env.SECRET_KEY,
-//     saveUninitialized: true,
-//     resave: false
-// }));
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET_KEY,
+        saveUninitialized: false,
+        resave: false,
+    }),
+);
 
 // app.use(flash());
 
@@ -36,6 +38,11 @@ app.set('view engine', 'ejs');
 // if (process.env.NODE_ENV === 'development') {
 //     app.use(morgan('dev'));
 // }
+
+app.use(function (req, res, next) {
+    res.locals.user = req.session.user;
+    next();
+});
 
 const route = require('./routes');
 

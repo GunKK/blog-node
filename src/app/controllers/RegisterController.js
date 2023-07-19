@@ -11,24 +11,24 @@ class RegisterController {
             // console.log(params);
             // validate
             if (params.name.trim().length === 0) {
-                res.render('signup', { data: { error: 'name is required' } });
+                return res.render('signup', { data: { error: 'name is required' } });
             }
             if (params.password.trim().length === 0) {
-                res.render('signup', { data: { error: 'password is required' } });
+                return res.render('signup', { data: { error: 'password is required' } });
             }
 
             if (params.password != params.re_password) {
-                res.render('signup', { data: { error: 'password is not match' } });
+                return res.render('signup', { data: { error: 'password is not match' } });
             }
 
             const [user] = await User.emailExist(params.email);
             const check = parseInt(user[0].count);
             if (check != 0) {
-                res.render('signup', { data: { error: 'email already exists' } });
+                return res.render('signup', { data: { error: 'email already exists' } });
             } else {
                 const hash = helper.hashPassword(params.password);
                 const newUser = await User.create(params.name, params.email, hash, 2);
-                res.render('login', { data: { success: 'signup successful', user: newUser } });
+                return res.render('login', { data: { success: 'signup successful', user: newUser } });
             }
         } catch (error) {
             res.json({
