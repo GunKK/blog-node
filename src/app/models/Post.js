@@ -6,35 +6,45 @@ module.exports = class Post {
         this.user_id = user_id;
     }
 
-    save() {
-        let date = new Date().toISOString().slice(0, 19).replace('T', ' ');
-        return db.execute(
+    // save() {
+    //     let date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    //     return db.execute(
+    //         'insert into posts (name, description, user_id, created_at, updated_at) values (?,?,?,?,?)',
+    //         [this.name, this.description, this.user_id, date, date]  
+    //     );
+    // }
+
+    static async create(name, description, user_id) {
+        const date = new Date();
+        return await db.execute(
             'insert into posts (name, description, user_id, created_at, updated_at) values (?,?,?,?,?)',
-            [this.name, this.description, this.user_id, date, date]  
+            [name, description, user_id, date, date]  
         );
     }
 
-    update() {
-        let date = new Date().toISOString().slice(0, 19).replace('T', ' ');
-        return db.execute(
+    static async update(name, description, id) {
+        const date = new Date();
+        return await db.execute(
             'update posts set name = ?, description = ?, updated_at = ? where id = ?'
-            [this.name, this.description, date, this.id]  
+            [name, description, date, id]  
         );
     }
 
-    static fetchAll() {
-        return db.execute('select * from posts');
+    static async fetchAll() {
+        return await db.execute(
+            'select posts.id, posts.name, description, posts.created_at, posts.updated_at, users.name as author from posts join users where user_id = users.id'
+        );
     }
 
-    static findById(id) {
-        return db.execute('select * from posts where id = ?', [id]);
+    static async findById(id) {
+        return await db.execute('select * from posts where id = ?', [id]);
     }
 
-    static deleteById(id) {
-        return db.execute('delete from posts where id = ?', [id]);
+    static async deleteById(id) {
+        return await db.execute('delete from posts where id = ?', [id]);
     }
 
-    static findByUserId(userId) {
-        return db.execute('select * from posts where user_id = ?', [userId]);
+    static async findByUserId(userId) {
+        return await db.execute('select * from posts where user_id = ?', [userId]);
     }
 }

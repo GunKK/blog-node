@@ -1,6 +1,17 @@
+const Post = require("../models/Post");
+
 class HomeController {
-    index(req,res) {
-        res.render("home");
+    async index(req,res) {
+        try {
+            const [posts] = await Post.fetchAll();
+            // res.json({posts: posts});
+            return res.render("home", { posts: posts });
+        } catch (error) {
+            res.json({
+                status: 'error',
+                error: error.message
+            })
+        }
     }
 
     contact(req, res) {

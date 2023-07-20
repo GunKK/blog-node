@@ -44,7 +44,25 @@ app.use(function (req, res, next) {
     next();
 });
 
+//helpers function 
+
+app.locals.differenceDates = (date) => {
+    const updateDate = new Date(date);
+    const milliseconds = Date.now() - updateDate.getTime();
+    const oneDay = 1000 * 3600 * 24;
+    const oneHours = 1000 * 3600;
+    const oneMinute = 1000 * 60; 
+    if (milliseconds > oneDay) {
+        return `${Math.floor(milliseconds/oneDay)} days ago`;
+    } else if(milliseconds > oneHours) {
+        return `${Math.floor(milliseconds/oneHours)} hours ago`;
+    } else {
+        return `${Math.floor(milliseconds/oneMinute)} minutes ago`;
+    }
+}
+
 const route = require('./routes');
+const helper = require('./util/helper');
 
 // static folder
 app.use(express.static(path.join(__dirname, 'public')));

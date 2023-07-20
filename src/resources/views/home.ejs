@@ -18,85 +18,36 @@
                 <div class="row">
                     <h1 class="text-center mt-3 mb-3 text-success">Mới cập nhật</h1>
                 </div>
+                <% if (typeof posts !== 'undefined' && posts.length > 0) { %>
+                    <% posts.forEach( (post) => { %>
+                    <div class="row article-wrap mt-3 shadow p-3 bg-body rounded">
+                        <div class="article-info">
+                            <span class="text-secondary h6"><%= post.author %></span>
+                            <small>
+                                <%= differenceDates(post.created_at) %>
+                            </small>
+                        </div>
 
-                <div class="row article-wrap mt-3 shadow p-3 bg-body rounded">
-                    <div class="article-info">
-                        <span class="text-secondary h6">Nguyen Duc Hau</span>
-                        <small>2 days ago</small>
-                    </div>
+                        <div class="article-title">
+                            <a href="text-decoration-none"><%= post.name %></a>
+                        </div>
 
-                    <div class="article-title">
-                        <a href="text-decoration-none">PHP ngôn ngữ lập trình web</a>
-                    </div>
+                        <div class="article-body">
+                            <%= post.description %>
+                        </div>
 
-                    <div class="article-body">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse turpis lectus, suscipit nec
-                        purus et, vestibulum rhoncus nunc. Morbi pharetra ornare turpis, sit amet finibus nisl pharetra
-                        ultricies. Proin sed eros vestibulum, feugiat nisl a, commodo eros. Suspendisse tempus mauris ac
-                        ante tristique, vel pharetra eros tristique. Vivamus ut urna sodales, fermentum nisl vel,
-                        laoreet diam. Fusce suscipit cursus justo non congue. Proin aliquet ante ex, a venenatis tortor
-                        fringilla a. Pellentesque sagittis vel arcu ut bibendum. Pellentesque odio eros, lacinia
-                        tincidunt libero quis, vulputate bibendum nunc. Vivamus vitae facilisis lectus.
+                        <div class="article-reaction">
+                            <button class="btn btn-light"><i class="fa-sharp fa-regular fa-thumbs-up"></i> Thích</button>
+                            <button class="btn btn-light"><i class="fa-regular fa-comment"></i> Bình luận</button>
+                            <button class="btn btn-light"><i class="fa-solid fa-share"></i> Chia sẻ</button>
+                        </div>
                     </div>
-
-                    <div class="article-reaction">
-                        <button class="btn btn-light"><i class="fa-sharp fa-regular fa-thumbs-up"></i> Thích</button>
-                        <button class="btn btn-light"><i class="fa-regular fa-comment"></i> Bình luận</button>
-                        <button class="btn btn-light"><i class="fa-solid fa-share"></i> Chia sẻ</button>
+                    <% }) %>
+                <% } else { %>
+                    <div class="alert alert-warning">
+                        Chưa có bài viết nào !
                     </div>
-                </div>
-                <div class="row article-wrap mt-3 shadow p-3 bg-body rounded">
-                    <div class="article-info">
-                        <span class="text-secondary h6">Nguyen Duc Hau</span>
-                        <small>2 days ago</small>
-                    </div>
-
-                    <div class="article-title">
-                        <a href="text-decoration-none">PHP ngôn ngữ lập trình web</a>
-                    </div>
-
-                    <div class="article-body">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse turpis lectus, suscipit nec
-                        purus et, vestibulum rhoncus nunc. Morbi pharetra ornare turpis, sit amet finibus nisl pharetra
-                        ultricies. Proin sed eros vestibulum, feugiat nisl a, commodo eros. Suspendisse tempus mauris ac
-                        ante tristique, vel pharetra eros tristique. Vivamus ut urna sodales, fermentum nisl vel,
-                        laoreet diam. Fusce suscipit cursus justo non congue. Proin aliquet ante ex, a venenatis tortor
-                        fringilla a. Pellentesque sagittis vel arcu ut bibendum. Pellentesque odio eros, lacinia
-                        tincidunt libero quis, vulputate bibendum nunc. Vivamus vitae facilisis lectus.
-                    </div>
-
-                    <div class="article-reaction">
-                        <button class="btn btn-light"><i class="fa-sharp fa-regular fa-thumbs-up"></i> Thích</button>
-                        <button class="btn btn-light"><i class="fa-regular fa-comment"></i> Bình luận</button>
-                        <button class="btn btn-light"><i class="fa-solid fa-share"></i> Chia sẻ</button>
-                    </div>
-                </div>
-                <div class="row article-wrap mt-3 shadow p-3 bg-body rounded">
-                    <div class="article-info">
-                        <span class="text-secondary h6">Nguyen Duc Hau</span>
-                        <small>2 days ago</small>
-                    </div>
-
-                    <div class="article-title">
-                        <a href="text-decoration-none">PHP ngôn ngữ lập trình web</a>
-                    </div>
-
-                    <div class="article-body">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse turpis lectus, suscipit nec
-                        purus et, vestibulum rhoncus nunc. Morbi pharetra ornare turpis, sit amet finibus nisl pharetra
-                        ultricies. Proin sed eros vestibulum, feugiat nisl a, commodo eros. Suspendisse tempus mauris ac
-                        ante tristique, vel pharetra eros tristique. Vivamus ut urna sodales, fermentum nisl vel,
-                        laoreet diam. Fusce suscipit cursus justo non congue. Proin aliquet ante ex, a venenatis tortor
-                        fringilla a. Pellentesque sagittis vel arcu ut bibendum. Pellentesque odio eros, lacinia
-                        tincidunt libero quis, vulputate bibendum nunc. Vivamus vitae facilisis lectus.
-                    </div>
-
-                    <div class="article-reaction">
-                        <button class="btn btn-light"><i class="fa-sharp fa-regular fa-thumbs-up"></i> Thích</button>
-                        <button class="btn btn-light"><i class="fa-regular fa-comment"></i> Bình luận</button>
-                        <button class="btn btn-light"><i class="fa-solid fa-share"></i> Chia sẻ</button>
-                    </div>
-                </div>
+                <% } %>
             </div>
         </div>
 
