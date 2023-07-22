@@ -1,13 +1,13 @@
 <% block('title').append('Post detail') %> <% layout('layouts/main') -%>
 <div class="container mt-5 mb-5">
     <div class="row mt-3 mb-3">
-        <a href="/" class="text-decoration-none" style="display: contents">Trang chủ</a> 
-        > <a href="#" class="text-decoration-none" style="display: contents;">Bài viết #<%= post.id %></a>
+        <a href="/" class="text-decoration-none" style="display: contents">Trang chủ</a>
+        > <a href="#" class="text-decoration-none" style="display: contents">Bài viết #<%= post.id %></a>
     </div>
 
     <div class="row">
         <div class="col-xl-6 col-md-12">
-            <img src="/images/polo_xanh.png" class="img-fluid rounded articles-img">
+            <img src="/images/polo_xanh.png" class="img-fluid rounded articles-img" />
         </div>
         <div class="col-xl-6 col-md-12">
             <p class="h6"><%= post.name %></p>
@@ -17,17 +17,168 @@
         </div>
     </div>
 
-    <% if (currentUser && (post.user_id === currentUser.id)) { %> 
-        <div class="row">
-            <div class="col">
-                <a href="/post/<%= post.id %>/edit" class="btn btn-warning">Cập nhật</a>
-            </div>
-            <div class="col">
-                <form action="/post/<%= post.id%>?_method=DELETE" method="post">
-                    <input type="hidden" name="id" value="<%= post.id%>">
-                    <button type="submit" class="btn btn-outline-danger">Xóa bài viết</button>
-                </form>
+    <% if (currentUser && (post.user_id === currentUser.id)) { %>
+    <div class="row">
+        <div class="col">
+            <a href="/post/<%= post.id %>/edit" class="btn btn-warning">Cập nhật</a>
+        </div>
+        <div class="col">
+            <form action="/post/<%= post.id%>?_method=DELETE" method="post">
+                <input type="hidden" name="id" value="<%= post.id%>" />
+                <button type="submit" class="btn btn-outline-danger">Xóa bài viết</button>
+            </form>
+        </div>
+    </div>
+    <% } %>
+    <div class="row" id="post-comment">
+        <div class="div col">
+            <div class="container card mt-5 mb-5">
+                <div class="row">
+                    <div class="ps-3 pe-3 pt-2">
+                        <% if (comments.length === 0) { %>
+                            <h3 class="border-bottom border-secondary pb-3">Hãy là người đầu tiên đánh giá bài viết này</h3>
+                        <% } else { %>
+                            <h3 class="border-bottom border-secondary pb-3">Viết bình luận cho bài viết</h3>    
+                        <% } %>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- Review -->
+                    <% if (comments.length !== 0 ) { %>
+                        <% comments.forEach((comment) => { %>
+                            <div class="ps-3 pe-3 pt-2">
+                                <div class="media-body border-bottom border-secondary">
+                                    <% if (post.user_id === comment.user_id) {%>
+                                        <span class="h5 text-primary">Tác giả</span>
+                                    <% } else { %>
+                                    <span class="h5"><%= comment.user_name %></span>
+                                    <% } %>
+                                    <p class="mt-3 ms-2">
+                                        <span class="text-success"><%= comment.title %></span>: <%= comment.content%>
+                                    </p>
+                                    <p class="ms-2">
+                                        <i class="fa-solid fa-clock"></i> 
+                                        <small> <%= differenceDates(comment.updated_at)%> </small>
+                                        <% if (currentUser && comment.user_id === currentUser.id) { %>
+                                            <form action="/comment/<%= comment.id %>?_method=DELETE" method="post">
+                                                <button type="button"
+                                                    class="ms-2 btn btn-light"
+                                                    data-bs-toggle="modal" data-bs-target="#update-post-form-<%= comment.id %>" >
+                                                    <i class="fa-sharp fa-solid fa-circle-star"></i>
+                                                    <i class="fa-solid fa-pen"></i>
+                                                </button>
+                                                <input type="hidden" name="commentId" value="<%= comment.id%>">
+                                                <button class="ms-1 btn btn-light" type="submit"><i class="fa-solid fa-trash"></i></button>
+                                            </form>
+                                        <% } %>
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- update comment form -->
+                            <% if (currentUser && comment.user_id === currentUser.id) { %>
+                                <div class="modal fade" id="update-post-form-<%= comment.id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <form action="/comment/<%= comment.id %>?_method=PUT" method="post">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Đánh giá bài viết</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="mb-3">
+                                                        <label for="titleReview" class="form-label">Tiêu đề</label>
+                                                        <input type="hidden" name="commentId" value="<%= comment.id%>">
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            id="titleReview"
+                                                            name="title"
+                                                            placeholder="Mời nhập tiêu đề"
+                                                            value=<%= comment.title %>
+                                                        />
+                                                    </div>
+                                                    <div class="form-floating">
+                                                        <textarea
+                                                            class="form-control"
+                                                            placeholder="Leave a comment here"
+                                                            name="content"
+                                                            id="content"
+                                                            style="height: 100px"
+                                                        ><%= comment.content %></textarea>
+                                                        <label for="content">Đánh giá</label>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                    <button type="submit" name="review" class="btn btn-success">Gửi</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            <% } %>
+                        <% }) %>
+                    <% } %>
+
+                    <div class="ps-3 pe-3 pt-3 pb-3">
+                        <button type="button" <% if (currentUser) { %>
+                            class="btn btn-primary" <% } else { %> class="btn btn-primary disabled" <% } %>
+                            data-bs-toggle="modal" data-bs-target="#create-post-form" >
+                            <i class="fa-sharp fa-solid fa-circle-star"></i>
+                            Viết đánh giá
+                        </button>
+
+                        <div class="mt-1">
+                            <i>
+                                <small>
+                                    (<i class="fa-regular fa-asterisk"></i>) Vui lòng đăng nhập để đánh giá bài viết
+                                </small>
+                            </i>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    <% } %>
+    </div>
+     <!-- modal review form -->
+    <div class="modal fade" id="create-post-form" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form action="/comment/store" method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Đánh giá bài viết</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="titleReview" class="form-label">Tiêu đề</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="titleReview"
+                                name="title"
+                                placeholder="Mời nhập tiêu đề"
+                            />
+                        </div>
+                        <div class="form-floating">
+                            <textarea
+                                class="form-control"
+                                placeholder="Leave a comment here"
+                                name="content"
+                                id="content"
+                                style="height: 100px"
+                            ></textarea>
+                            <label for="content">Đánh giá</label>
+                        </div>
+
+                        <input type="hidden" name="postId" value="<%= post.id%>">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" name="review" class="btn btn-success">Gửi</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

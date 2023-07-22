@@ -1,39 +1,36 @@
-const dc = require('../../config/db/index');
-const { deleteById } = require('./User');
+const db = require('../../config/db/index');
 module.exports = class Comment {
-    constructor(title, content, user_id, post_id) {
+    constructor(title, content, userId, postId) {
         this.title = title;
         this.content = content;
-        this.user_id = user_id;
-        this.post_id = post_id;
+        this.userId = userId;
+        this.postId = postId;
     }
 
-    save() {
-        let date = new Date().toISOString().slice(0, 19).replace('T', ' ');
-        return db.execute(
-            'insert into comments (title, content, user_id, post_id, created_at, updated_at) values (?,?,?,?,?,?,?)',
-            [this.title, this.content, this.user_id, this.post_id, date, date]
+    static async create(title, content, userId, postId) {
+        const date = new Date();
+        return await db.execute(
+            'insert into comments (title, content, user_id, post_id, created_at, updated_at) values (?,?,?,?,?,?)',
+            [title, content, userId, postId, date, date]
         );
     }
 
-    update() {
-        let date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    static async update(title, content, id) {
+        const date = new Date();
         return db.execute(
-            'update comments set title = ?, content = ?, updated_at = ? where id = ?'
-            [this.title, this.content, date, this.id] 
+            'update comments set title = ?, content = ?, updated_at = ? where id = ?',
+            [title, content, date, id]
         );
     }
 
-    static fetchAll() {
-        return db.execute('select * from comments');
-    }
-
-    static findById(id) {
-        return db.execute('select * from comments where id = ?', [id]);
-    }
-
-    static findByPostId(postId) {
-        return db.execute('select * from comments where post_id = ?', [post_id]);
+    static async findByPostId(postId) {
+        return await db.execute(
+            `select comments.id as id, title, content, comments.updated_at, user_id, users.name as user_name from comments 
+            join users
+            on users.id = user_id
+            where post_id = ?`, 
+            [postId]
+        );
     }
 
     static deleteById(id) {

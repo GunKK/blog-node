@@ -32,12 +32,15 @@ module.exports = class Post {
 
     static async fetchAll() {
         return await db.execute(
-            'select posts.id, posts.name, description, posts.created_at, posts.updated_at, users.name as author from posts join users where user_id = users.id'
+            'select posts.id, posts.name, description, posts.created_at, posts.updated_at, users.name as author from posts join users on user_id = users.id'
         );
     }
 
     static async findById(id) {
-        return await db.execute('select * from posts where id = ?', [id]);
+        return await db.execute(
+            'select posts.id, posts.name, description, user_id ,posts.created_at, posts.updated_at, users.name as author from posts join users on user_id = users.id where posts.id = ?', 
+            [id]
+        );
     }
 
     static async deleteById(id) {

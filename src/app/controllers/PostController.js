@@ -1,4 +1,5 @@
 const Post = require("../models/Post");
+const Comment = require("../models/Comment");
 
 class PostController {
     create(req, res) {
@@ -9,15 +10,10 @@ class PostController {
         try {
             const { name, description } = req.body;
             const userId = req.session.user.id;
-            const result =  await Post.create(name, description, userId);
-            if (result) {
-                return res.redirect('/')
-            } else {
-                return res.json({
-                    status: 'error',
-                    error: error.message
-                }) 
-            }
+            await Post.create(name, description, userId);
+            const [result] = await Post.getUpdateLatestPost()
+            const postId = result[0].id
+            return res.redirect(`/#post-${postId}`)
         } catch (error) {
             res.json({
                 status: 'error',
@@ -35,7 +31,11 @@ class PostController {
                 })
             } else {
                 const post = result[0];
-                return res.render('posts/show', {post: post});
+                const [comments] = await Comment.findByPostId(req.params.id);
+                return res.render('posts/show', {
+                    post: post, 
+                    comments: comments
+                });
             }
         } catch (error) {
             res.json({
