@@ -7,6 +7,7 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const flash = require('connect-flash');
+const methodOverride = require('method-override');
 
 const app = express();
 
@@ -17,7 +18,11 @@ app.use(
 );
 
 app.use(bodyParser.json());
+app.use(methodOverride('_method'))
 
+// static folder
+app.use(express.static(path.join(__dirname, 'public')));
+// template ejs 
 app.engine('ejs', engine);
 app.set('views', path.join(__dirname, 'resources', 'views'));
 app.set('view engine', 'ejs');
@@ -27,6 +32,7 @@ app.use(
         secret: process.env.SESSION_SECRET_KEY,
         saveUninitialized: false,
         resave: false,
+        cookie: { maxAge:  1000 * 60 * 60 * 24 * 7}
     }),
 );
 
@@ -35,12 +41,12 @@ app.use(
 // app.use(cookieParser());
 
 // middleware
-// if (process.env.NODE_ENV === 'development') {
-//     app.use(morgan('dev'));
-// }
+if (process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev'));
+}
 
 app.use(function (req, res, next) {
-    res.locals.user = req.session.user;
+    res.locals.currentUser = req.session.user;
     next();
 });
 
@@ -62,11 +68,6 @@ app.locals.differenceDates = (date) => {
 }
 
 const route = require('./routes');
-const helper = require('./util/helper');
-
-// static folder
-app.use(express.static(path.join(__dirname, 'public')));
-
 // routes init
 route(app);
 

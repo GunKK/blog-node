@@ -1,0 +1,33 @@
+<% block('title').append('Post detail') %> <% layout('layouts/main') -%>
+<div class="container mt-5 mb-5">
+    <div class="row mt-3 mb-3">
+        <a href="/" class="text-decoration-none" style="display: contents">Trang chủ</a> 
+        > <a href="#" class="text-decoration-none" style="display: contents;">Bài viết #<%= post.id %></a>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-6 col-md-12">
+            <img src="/images/polo_xanh.png" class="img-fluid rounded articles-img">
+        </div>
+        <div class="col-xl-6 col-md-12">
+            <p class="h6"><%= post.name %></p>
+            <p class="text-secondary"><i class="fa-solid fa-user"></i> <%= post.author %></p>
+            <p><%= post.description %></p>
+            <p class="text-success"><%= differenceDates(post.updated_at) %></p>
+        </div>
+    </div>
+
+    <% if (currentUser && (post.user_id === currentUser.id)) { %> 
+        <div class="row">
+            <div class="col">
+                <a href="/post/<%= post.id %>/edit" class="btn btn-warning">Cập nhật</a>
+            </div>
+            <div class="col">
+                <form action="/post/<%= post.id%>?_method=DELETE" method="post">
+                    <input type="hidden" name="id" value="<%= post.id%>">
+                    <button type="submit" class="btn btn-outline-danger">Xóa bài viết</button>
+                </form>
+            </div>
+        </div>
+    <% } %>
+</div>

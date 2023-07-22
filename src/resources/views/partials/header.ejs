@@ -50,8 +50,8 @@
                 </div>
             </form> -->
             <ul class="nav navbar-nav pull-right">
-                <% if (user) { %>
-                <li class="nav-item"><a href="#" class="nav-link"><b><%= user.name %></b></a></li>
+                <% if (currentUser) { %>
+                <li class="nav-item"><a href="/account/edit" class="nav-link"><b><%= currentUser.name %></b></a></li>
                 <li class="nav-item">
                     <form action="/logout" method="post">
                         <button type="submit" class="nav-link">Đăng xuất</button>

@@ -14,16 +14,18 @@ module.exports = class User {
     //     );
     // }
     static async create(name, email, password, role) {
+        const date = new Date();
         return await db.execute(
-            'insert into users (name, email, password, role) values (?,?,?,?)',
-            [name, email, password, role]
+            'insert into users (name, email, password, role, created_at, updated_at) values (?,?,?,?,?,?)',
+            [name, email, password, role, date, date]
         );
     }
 
-    update() {
-        return db.execute(
-            'update users set name = ?, email = ?, password = ?, role = ? where id = ?'
-            [this.name, this.email, this.password, this.role, this.id]  
+    static async update(name, password, id) {
+        const date = new Date();
+        return await db.execute(
+            'update users set name = ?, password = ?, updated_at = ? where id = ?',
+            [name, password, date ,id]  
         );
     }
 
@@ -35,15 +37,15 @@ module.exports = class User {
         return await db.execute('select count(*) as count from users where email = ?', [email]);
     }
 
-    static fetchAll() {
-        return db.execute('select * from users');
+    static async fetchAll() {
+        return await db.execute('select * from users');
     }
 
-    static findById(id) {
-        return db.execute('select * from users where id = ?', [id]);
+    static async findById(id) {
+        return await db.execute('select * from users where id = ?', [id]);
     }
 
-    static deleteById(id) {
-        return db.execute('delete from users where id = ?', [id]);
+    static async deleteById(id) {
+        return await db.execute('delete from users where id = ?', [id]);
     }
 }

@@ -25,7 +25,7 @@ module.exports = class Post {
     static async update(name, description, id) {
         const date = new Date();
         return await db.execute(
-            'update posts set name = ?, description = ?, updated_at = ? where id = ?'
+            `update posts set name = ?, description = ?, updated_at = ? where id = ?`,
             [name, description, date, id]  
         );
     }
@@ -46,5 +46,9 @@ module.exports = class Post {
 
     static async findByUserId(userId) {
         return await db.execute('select * from posts where user_id = ?', [userId]);
+    }
+
+    static async getUpdateLatestPost() {
+        return await db.execute('SELECT * FROM posts ORDER BY updated_at DESC LIMIT 1');
     }
 }

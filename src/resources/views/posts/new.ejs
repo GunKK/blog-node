@@ -1,45 +1,46 @@
-<% block('title').append('Account page') %> <% layout('layouts/main') -%>
+<% block('title').append('Create post') %> <% layout('layouts/main') -%>
 <div class="container mt-5 mb-5">
     <div class="row mt-3 mb-3 ms-5">
         <a href="/" class="text-decoration-none" style="display: contents">Trang chủ</a>
-        > Tài khoản
+        > Tạo bài viết
     </div>
 
     <div class="row">
-        <h1 class="text-center">Cập nhật tài khoản</h1>
+        <h1 class="text-center">Tạo mới bài viết</h1>
     </div>
 
     <div class="row">
         <div class="col-xl-4 col-md-3 col-sm-2"></div>
         <div class="col-xl-4 col-md-6 col-sm-8">
-            <form action="/account/edit?_method=PUT" method="post">
+            <form action="/post/store" method="post">
                 <div class="mb-3">
-                    <label for="name" class="form-label">User name</label>
+                    <label for="name" class="form-label">Tên bài viết</label>
                     <input
                         id="name"
                         type="text"
                         class="form-control"
                         name="name"
-                        placeholder="GunKK, hau1234,..."
-                        value="<%= currentUser.name %>"
+                        placeholder="Web, Mobile, Fullstack"
+                        required
                     />
                 </div>
-
                 <div class="mb-3">
-                    <label for="name" class="form-label">Mật khẩu</label>
-                    <input
-                        id="name"
-                        type="password"
+                    <label for="description" class="form-label">Mô tả</label>
+                    <textarea
+                        id="description"
+                        name="description"
                         class="form-control"
-                        name="password"
-                    />
+                        cols="30"
+                        rows="10"
+                        placeholder="<%= currentUser.name %> ơi, bạn đang nghĩ gì"
+                    ></textarea>
                 </div>
-                <!-- <div class="mb-3">
+                <div class="mb-3">
                     <label for="file" class="form-label">File ảnh (không yêu cầu)</label>
                     <input id="file" type="file" class="form-control" name="images" />
-                </div> -->
+                </div>
                 <div class="mb-3">
-                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="submit" class="btn btn-primary">Tạo mới</button>
                 </div>
             </form>
         </div>
