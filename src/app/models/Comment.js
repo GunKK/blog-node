@@ -28,8 +28,21 @@ module.exports = class Comment {
             `select comments.id as id, title, content, comments.updated_at, user_id, users.name as user_name from comments 
             join users
             on users.id = user_id
-            where post_id = ?`, 
+            where post_id = ?
+            and parent_id IS NULL
+            order by updated_at DESC`, 
             [postId]
+        );
+    }
+
+    static async getRepliesOfComment(parentId) {
+        return await db.execute(
+            `select comments.id as id, title, content, comments.updated_at, user_id, users.name as user_name from comments 
+            join users
+            on users.id = user_id
+            where parent_id = ?
+            order by updated_at DESC`,
+            [parentId]
         );
     }
 

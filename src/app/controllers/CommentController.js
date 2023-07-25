@@ -41,6 +41,22 @@ class CommentController {
             }) 
         }
     }
+
+    async showReplies(req,res) {
+        try {   
+            const parentId = req.params.id 
+            console.log(req.body)      
+            const [replies] = await Comment.getRepliesOfComment(parentId)
+            res.status(200).json({
+                replies: replies
+            })
+        } catch (error) {
+            res.status(500).json({
+                status: 'error',
+                error: error.message
+            })
+        }
+    }
 }
 
 module.exports = new CommentController();

@@ -56,6 +56,18 @@
                                     <p class="mt-3 ms-2">
                                         <span class="text-success"><%= comment.title %></span>: <%= comment.content%>
                                     </p>
+                                    <div>
+                                        <p>
+                                            <button class="btn btn-light btn-get-reply" data-id="<%= comment.id %>" type="button" data-bs-toggle="collapse" data-bs-target="#comment-<%= comment.id %>" aria-expanded="false" aria-controls="comment-<%= comment.id %>">
+                                                Xem thêm phản hồi
+                                            </button>
+                                        </p>
+                                        <div class="collapse" id="comment-<%= comment.id %>">
+                                            <div class="card card-body">
+                                                Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+                                            </div>
+                                        </div>
+                                    </div>
                                     <p class="ms-2">
                                         <i class="fa-solid fa-clock"></i> 
                                         <small> <%= differenceDates(comment.updated_at)%> </small>

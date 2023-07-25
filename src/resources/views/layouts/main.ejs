@@ -32,10 +32,28 @@
             $(document).ready(function () {
                 $(window).scroll(function () {
                     if ($(this).scrollTop() > 114) {
-                        $('#navbar-top').addClass('fix-nav');
+                        $('#navbar-top').addClass('fixed-top');
                     } else {
-                        $('#navbar-top').removeClass('fix-nav');
+                        $('#navbar-top').removeClass('fixed-top');
                     }
+                });
+
+                $(".btn-get-reply").click(function(e) {
+                    console.log($(this));
+                    e.preventDefault();
+                    const id = $(this).attr('data-id');
+                    console.log(id);
+                    $.ajax({
+                        url: `  /comment/api/replies/${id}`,
+                        method: 'GET',
+                        success: function(res) {
+                            console.log(res.replies);
+                            
+                        }, 
+                        error: function(message) {
+                            console.log(message.responseJSON)
+                        }
+                    });
                 });
             });
         </script>
