@@ -6,5 +6,6 @@ router.post('/store', CommentController.store)
 router.put('/:id', CommentController.update)
 router.delete('/:id', CommentController.destroy)
 router.get('/api/replies/:id', CommentController.showReplies)
+router.post('/store/reply', CommentController.storeReply)
 
 module.exports = router;

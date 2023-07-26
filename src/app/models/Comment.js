@@ -37,12 +37,20 @@ module.exports = class Comment {
 
     static async getRepliesOfComment(parentId) {
         return await db.execute(
-            `select comments.id as id, title, content, comments.updated_at, user_id, users.name as user_name from comments 
+            `select comments.id as id, title, content, post_id, comments.updated_at, user_id, users.name as user_name from comments 
             join users
             on users.id = user_id
             where parent_id = ?
             order by updated_at DESC`,
             [parentId]
+        );
+    }
+
+    static async createReply(title, content, userId, postId, parentId) {
+        const date = new Date();
+        return await db.execute(
+            'insert into comments (title, content, user_id, post_id, parent_id, created_at, updated_at) values (?,?,?,?,?,?,?)',
+            [title, content, userId, postId, parentId, date, date]
         );
     }
 

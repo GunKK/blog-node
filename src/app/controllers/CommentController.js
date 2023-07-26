@@ -57,6 +57,20 @@ class CommentController {
             })
         }
     }
+
+    async storeReply(req,res) {
+        try {
+            const {parentId, title, content, postId } = req.body;
+            const userId = req.session.user.id;
+            await Comment.createReply(title, content, userId, postId, parentId);
+            return res.redirect(`/post/${postId}`);
+        } catch (error) {
+            res.status(500).json({
+                status: 'error',
+                error: error.message
+            })
+        }
+    }
 }
 
 module.exports = new CommentController();
