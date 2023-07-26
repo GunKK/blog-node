@@ -22,25 +22,28 @@ USE `blog_node`;
 -- Dumping structure for table blog_node.comments
 CREATE TABLE IF NOT EXISTS `comments` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `title` varchar(50) NOT NULL DEFAULT '0',
+  `title` varchar(50) NOT NULL,
   `content` text DEFAULT NULL,
   `user_id` bigint(20) DEFAULT NULL,
-  `posts_id` bigint(20) NOT NULL,
+  `post_id` bigint(20) NOT NULL,
+  `parent_id` bigint(20) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK_comments_posts` (`posts_id`),
   KEY `FK_comments_users` (`user_id`),
-  CONSTRAINT `FK_comments_posts` FOREIGN KEY (`posts_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY `FK_comments_posts` (`post_id`) USING BTREE,
+  KEY `FK_comments_comments` (`parent_id`),
+  CONSTRAINT `FK_comments_comments` FOREIGN KEY (`parent_id`) REFERENCES `comments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_comments_posts` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_comments_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 
 -- Data exporting was unselected.
 
 -- Dumping structure for table blog_node.posts
 CREATE TABLE IF NOT EXISTS `posts` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL DEFAULT '0',
+  `name` varchar(50) DEFAULT NULL,
   `description` text DEFAULT NULL,
   `user_id` bigint(20) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -48,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `posts` (
   PRIMARY KEY (`id`),
   KEY `FK_posts_users` (`user_id`),
   CONSTRAINT `FK_posts_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
 
 -- Data exporting was unselected.
 
@@ -65,18 +68,6 @@ CREATE TABLE IF NOT EXISTS `post_images` (
 
 -- Data exporting was unselected.
 
--- Dumping structure for table blog_node.replies
-CREATE TABLE IF NOT EXISTS `replies` (
-  `comment_id` bigint(20) NOT NULL,
-  `reply_id` bigint(20) NOT NULL,
-  KEY `FK__comments` (`comment_id`),
-  KEY `FK__comments_2` (`reply_id`),
-  CONSTRAINT `FK__comments` FOREIGN KEY (`comment_id`) REFERENCES `comments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK__comments_2` FOREIGN KEY (`reply_id`) REFERENCES `comments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- Data exporting was unselected.
-
 -- Dumping structure for table blog_node.users
 CREATE TABLE IF NOT EXISTS `users` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -88,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4;
 
 -- Data exporting was unselected.
 
